@@ -12,9 +12,9 @@ import os
 
 class Controller:
     def __init__(self, view, analyzer):
-        self.view = view
-        self.analyzer = analyzer
-        self.choices = {
+        self.__view = view
+        self.__analyzer = analyzer
+        self.__choices = {
             "1": self.selection1,
             "2": self.selection2,
             "3": self.selection3,
@@ -27,9 +27,8 @@ class Controller:
 
     def run(self):
         while True:
-            selection = view.display_menu()
-
-            self.choices[selection]()
+            selection = self.__view.display_menu()
+            self.__choices[selection]()
 
             if selection == "8":
                 break
@@ -40,8 +39,8 @@ class Controller:
         message = input()
         print("")
         key = self.get_key()
-        encrypted = self.analyzer.encrypt(message, key if encrypt == "E" else -key)
-        view.display_encryption(message, encrypted)
+        encrypted = self.__analyzer.encrypt(message, key if encrypt == "E" else -key)
+        self.__view.display_encryption(message, encrypted)
 
     def selection2(self):
         print("Option 2 is selected\n")
@@ -56,11 +55,11 @@ class Controller:
             key = self.get_key()
             new_file_path = self.get_file_path("Enter the output file: ")
 
-            file_encrypted = self.analyzer.encrypt(
+            file_encrypted = self.__analyzer.encrypt(
                 file_contents, key if user_option == "E" else -key
             )
 
-            self.analyzer.writefile(new_file_path, file_encrypted)
+            self.__analyzer.writefile(new_file_path, file_encrypted)
             break
         continuemsg = input("Press any key to continue...")
 
@@ -68,8 +67,8 @@ class Controller:
         text_filepath = self.get_file_path("Please enter the file you want to analyze: ")
         text = self.open_non_empty_file(text_filepath, "Please enter the file you want to analyze: ")
 
-        letter_frequency = self.analyzer.get_frequency(text)
-        self.view.display_analyze_frequency(letter_frequency)
+        letter_frequency = self.__analyzer.get_frequency(text)
+        self.__view.display_analyze_frequency(letter_frequency)
         print("Option 3 Selected")
 
     def selection4(self):
@@ -85,8 +84,8 @@ class Controller:
         reference_file = reference_file_content.replace("\n", ",").split(",")
         letterfrequency = [float(x) for x in reference_file[1::2]]
 
-        key = self.analyzer.infer_caesar_cipher_key(file_content, letterfrequency)
-        self.view.display_key(key) # Display Key
+        key = self.__analyzer.infer_caesar_cipher_key(file_content, letterfrequency)
+        self.__view.display_key(key) # Display Key
 
         user_option = self.check_input(
             "^[yn]$",
@@ -97,13 +96,18 @@ class Controller:
 
         if user_option == "y":
             new_file_path = self.get_file_path("Enter the output file: ")
-            decrypted_contents = self.analyzer.encrypt(file_content, -key)
-            self.analyzer.writefile(new_file_path, decrypted_contents)
+            decrypted_contents = self.__analyzer.encrypt(file_content, -key)
+            self.__analyzer.writefile(new_file_path, decrypted_contents)
 
     def selection5(self):
         print("")
-        folder_name = self.check_folder()
-        self.analyzer.process_folder(folder_name, encrypt=None, infer=True, key=None)
+        # folder_name = self.check_folder()
+        # ? = self.analyzer.process_folder(folder_name, encrypt=None, infer=True, key=None)
+    
+        # write to files
+        # save to database
+        # print to console
+        # do nothing about it?
 
     def selection6(self):
         print("Option 6 Selected")
@@ -112,7 +116,7 @@ class Controller:
         enc = self.get_encrypt()
         key = self.get_key()
 
-        self.analyzer.process_folder(folder_name, key, encrypt=enc, infer=None)
+        self.__kanalyzer.process_folder(folder_name, key, encrypt=enc, infer=None)
 
     def selection7(self):
         print("Option 7 Selected")

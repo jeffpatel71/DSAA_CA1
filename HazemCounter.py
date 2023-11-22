@@ -12,14 +12,8 @@ class LetterFrequency:
         total_letters = 0
         for char in input_string.lower():
             if 'a' <= char <= 'z':
-                self.letter_counts[ord(char) - ord('a')] += 1
-                # so it takes the ascii value of the char and subtracts the ascii value of a
-                # so if char is a, then ord(char) - ord('a') = 0
-                # if char is b, then ord(char) - ord('a') = 1
-                # so on... so it's basically just a way to get the index of the letter in the alphabet
                 total_letters += 1
-
         self.letter_counts = [100 *count / total_letters for count in self.letter_counts]
-
+        
     def get_frequencies(self):
         return self.letter_counts

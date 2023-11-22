@@ -3,9 +3,13 @@ import re
 ### Admission Number : 2200550
 ### Class : DAAA/FT/2B/07
 
+v1 = new View()
+v1. 
+
 class View:
     def __init__(self):
         self.selection = None
+        self.__test = ""
 
     def display_menu(self):
         while True:

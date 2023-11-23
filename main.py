@@ -151,7 +151,11 @@ class Controller:
         self.__input_output_handler.enter_message()
 
     def selection6(self):
+
+        
         folder_name = self.__input_output_handler.check_folder()
+        
+
         enc = self.__input_output_handler.get_encrypt()
         key = self.__input_output_handler.get_key()
 

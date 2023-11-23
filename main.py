@@ -143,13 +143,10 @@ class Controller:
         self.__input_output_handler.writefile(os.path.join(folder_path, "log.txt" ), file_keys_log)
 
     def selection6(self):
-        print("Option 6 Selected")
-
-        folder_name = self.check_folder()
-        enc = self.get_encrypt()
-        key = self.get_key()
-
-        self.__kanalyzer.process_folder(folder_name, key, encrypt=enc, infer=None)
+        folder_name = self.__input_output_handler.check_folder()
+        enc = self.__input_output_handler.get_encrypt()
+        key = self.__input_output_handler.get_key()
+        self.__analyzer.process_folder(folder_name, key, encrypt=enc, infer=None)
 
 
     def selection7(self):
@@ -173,10 +170,7 @@ class Controller:
             print("Please type text you want to encrypt: ")
             message = input()
 
-        (
-            percentage_similarity,
-            frequency_diff,
-        ) = self.analyzer.compare_frequency_distribution(message)
+        percentage_similarity, frequency_diff = self.analyzer.compare_frequency_distribution(message)
         self.view.display_frequency(frequency_diff, percentage_similarity)
 
     def goodbye(self):

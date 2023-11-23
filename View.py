@@ -15,8 +15,8 @@ class View:
                             3. Analyze letter frequency distribution
                             4. Infer Caesar cipher key from file
                             5. Analyze and sort encrypted files
-                            6. Batch Encrypt/Decrypt Files
-                            7. Compare frequency distribution with English language # on hold, not sure if we need this/makes sense
+                            6. Batch Encrypt Files
+                            7. Similarity of Encrypted Text to the English Language
                             8. Exit program""")
             self.__selection = input("Enter choice: ")
             if self.__selection in ["1", "2", "3", "4", "5", "6", "7", "8"]:

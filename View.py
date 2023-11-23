@@ -3,13 +3,9 @@ import re
 ### Admission Number : 2200550
 ### Class : DAAA/FT/2B/07
 
-v1 = new View()
-v1. 
-
 class View:
     def __init__(self):
-        self.selection = None
-        self.__test = ""
+        self.__selection = None
 
     def display_menu(self):
         while True:
@@ -22,9 +18,9 @@ class View:
                             6. Batch Encrypt/Decrypt Files
                             7. Compare frequency distribution with English language # on hold, not sure if we need this/makes sense
                             8. Exit program""")
-            self.selection = input("Enter choice: ")
-            if self.selection in ["1", "2", "3", "4", "5", "6", "7", "8"]:
-                return self.selection
+            self.__selection = input("Enter choice: ")
+            if self.__selection in ["1", "2", "3", "4", "5", "6", "7", "8"]:
+                return self.__selection
             else:
                 print("Invalid choice. Please enter a valid option (1-8).\n")
     
@@ -36,7 +32,6 @@ class View:
         print("The Inferred key is: ", key)
     
     def display_analyze_frequency(self, frequency):
-
         index_frequency_pairs = [(i, freq) for i, freq in enumerate(frequency)]
         top5 = sorted(index_frequency_pairs, key=lambda x:x[1], reverse=True)[:5]
         
@@ -45,19 +40,17 @@ class View:
             # Add the frequency percentage for the current character
             
             if i > 0:
-                line += f'  | {chr(91-i)}- {frequency[26 - i]}%'
+                line += f'  | {chr(91-i)}- {frequency[26 - i]:.2f}%'
             # Add the top 5 frequencies
             if i == 17:
                 line += '   TOP 5 FREQ'
-            if i == 16: 
-                line += '   ----------'
+
 
             if 10 < i < 16:
                 index, freq = top5[15 - i]
-                if freq >= 10:
-                    line += f'   | {chr(65 + index)}-{freq}%' # double digits
-                else:
-                    line += f'   | {chr(65 + index)}- {freq}%' # single digits
+                line += f'   | {chr(65 + index)}-{freq:.2f}%' # double digits
+                # else:
+                #     line += f'   | {chr(65 + index)}- {freq:.2f}%' # single digits
                 
 
             print(line)

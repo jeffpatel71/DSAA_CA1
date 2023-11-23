@@ -60,25 +60,6 @@ class CaesarCipherAnalyzer:
             else:
                 encrypted_text += char
         return encrypted_text
-
-    def openfile(self, file_path, input_message):
-        while True: 
-            try:
-                with open(file_path, "r") as file:
-                    file_contents = file.read()
-                    
-                    break
-            except FileNotFoundError:
-                print(f"The file '{file_path}' was not found.")
-                print("")
-                file_path = self.check_input(
-                "^.+\.txt$",
-                (input_message),
-                "Invalid input, please enter a valid file path",
-            )
-            except Exception as e:
-                print(f"An error occurred: {e}")
-        return file_contents
     
     def writefile(self, file_path, content_to_write):
         while True:  
@@ -98,7 +79,6 @@ class CaesarCipherAnalyzer:
         # Iterate through all files in the folder
         for file_name in os.listdir(folder_path):
             if file_name.endswith(".txt"):
-
                 file_path = os.path.join(folder_path, file_name)
                 file_contents = self.openfile(file_path, input_message="none")
                 if file_contents == "":

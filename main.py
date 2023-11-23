@@ -111,30 +111,34 @@ class Controller:
     def selection5(self):
         letterfrequency = [8.2, 1.5, 2.8, 4.3, 12.7, 2.2, 2.0, 6.1, 7.0, 0.15, 0.77, 4.0, 2.4, 6.7, 7.5, 1.9, 
                            0.095, 6.0, 6.3, 9.1, 2.8, 0.98, 2.4, 0.15, 2.0, 0.074]
-        folder_path = self.__input_output_handler.get_folder_path()
-
+        folder_path = self.__input_output_handler.check_folder()
         # retrieve all file paths inside that folder_path
         files_folder = self.__input_output_handler.get_files_folder(folder_path)
         file_keys = []
 
         for files in files_folder:
-            inferred_key = self.__analyzer.infer_caesar_cipher_key(files, letterfrequency)
+            content = self.__input_output_handler.openfile(os.path.join(folder_path, files), input_message="none")
+            if content == "":
+                print(f"The file '{files}' is empty, and won't be processed.")
+                continue
+            inferred_key = self.__analyzer.infer_caesar_cipher_key(content, letterfrequency)
+            print(f"Inferred key for {files} is {inferred_key}")
             file_keys.append((files, inferred_key))
 
         file_keys.sort(key=lambda x: x[1])
         file_keys_log = ""
         file_number = 1
+
         for file_name, key in file_keys:
-            file_contents = self.__view.openfile(os.path.join(folder_path, file_name), input_message="none")
+            file_contents = self.__input_output_handler.openfile(os.path.join(folder_path, file_name), input_message="none")
             file_contents = self.__analyzer.encrypt(file_contents, -key)
 
             # Write the decrypted contents to a new file
             file_no = f"file{file_number}.txt"
             self.__input_output_handler.writefile(os.path.join(folder_path, file_no), file_contents)
-            print(f"Decrypted : {file_name} with key {key} as :{file_no}.txt\n")
 
             # Add the file name and key to a log string
-            file_keys_log += f"Decrypted : {file_name} with key {key} as :{file_no}.txt\n"
+            file_keys_log += f"Decrypted : {file_name} with key {key} as :{file_no}\n"
             file_number += 1
         self.__input_output_handler.writefile(os.path.join(folder_path, "log.txt" ), file_keys_log)
 
@@ -146,6 +150,7 @@ class Controller:
         key = self.get_key()
 
         self.__kanalyzer.process_folder(folder_name, key, encrypt=enc, infer=None)
+
 
     def selection7(self):
         print("Option 7 Selected")

@@ -18,4 +18,3 @@ class LetterFrequency:
 
     def get_frequencies(self):
         return self.letter_counts
-

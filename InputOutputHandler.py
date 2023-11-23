@@ -59,8 +59,7 @@ class InputOutputHandler:
         while True: 
             try:
                 with open(file_path, "r") as file:
-                    file_contents = file.read()
-                    
+                    file_contents = file.read()                    
                     break
             except FileNotFoundError:
                 print(f"The file '{file_path}' was not found.")
@@ -105,5 +104,5 @@ class InputOutputHandler:
                 if file_contents == "":
                     print(f"The file '{file_path}' is empty, and won't be processed.")
                     continue
-                files_folder.append(file_path)
+                files_folder.append(file_name)
         return files_folder

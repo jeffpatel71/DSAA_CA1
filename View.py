@@ -25,8 +25,9 @@ class View:
                 print("Invalid choice. Please enter a valid option (1-8).\n")
     
     def display_encryption(self, message, encrypted):
-        print("Original message: ", message)
-        print("Encrypted message: ", encrypted)
+        print("Plaintext:      ", message)
+        print("Ciphertext:     ", encrypted)
+        print("")
     
     def display_key(self, key):
         print("The Inferred key is: ", key)
@@ -40,17 +41,21 @@ class View:
             # Add the frequency percentage for the current character
             
             if i > 0:
-                line += f'  | {chr(91-i)}- {frequency[26 - i]:.2f}%'
+                if frequency[26 - i]>=10:
+                    line += f'  | {chr(91-i)}-{frequency[26 - i]:.2f}%'
+                else:
+                    line += f'  | {chr(91-i)}- {frequency[26 - i]:.2f}%'
             # Add the top 5 frequencies
             if i == 17:
                 line += '   TOP 5 FREQ'
-
-
+            if i == 16:
+                line += '   -----------'
             if 10 < i < 16:
                 index, freq = top5[15 - i]
-                line += f'   | {chr(65 + index)}-{freq:.2f}%' # double digits
-                # else:
-                #     line += f'   | {chr(65 + index)}- {freq:.2f}%' # single digits
+                if freq>=10:
+                    line += f'   | {chr(65 + index)}-{freq:.2f}%' # double digits
+                else:
+                    line += f'   | {chr(65 + index)}- {freq:.2f}%' # single digits
                 
 
             print(line)

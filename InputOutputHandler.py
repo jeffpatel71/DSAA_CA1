@@ -13,29 +13,42 @@ class InputOutputHandler:
             inp = input(msg)
         return inp
 
+    def enter_message(self):
+        return input("Press any key to continue...")
+
     def get_key(self):
-        return int(
+        cipher_key =  int(
             self.check_input(
                 "^-?\d+$",
                 "Enter the cipher key: ",
                 "Invalid input, please enter a number",
             )
         )
+        print()
+        return cipher_key
 
     def get_encrypt(self):
-        return self.check_input(
+        ed = self.check_input(
             "^[ED]$",
-            "Enter E to encrypt, D to decrypt: ",
+            "Enter \"E\" to Encrypt or \"D\" to Decript: ",
             "Invalid input, please enter E or D",
         )
+        print()
+        return ed
 
     def get_message(self, text):
-        return input(text)
+        inp = input(text)
+        print()
+        return inp
 
-    def get_file_path(self, prompt):
-        return self.check_input(
+    def get_file_path(self, prompt, nospacing = False):
+        file_path = self.check_input(
             "^.+\.txt$", prompt, "Invalid input, please enter a valid file path"
         )
+        if nospacing == True:
+            return file_path
+        print()
+        return file_path
 
     def open_non_empty_file(self, file_path, prompt):
         while True:

@@ -33,40 +33,40 @@ class Controller:
                 break
 
     def selection1(self):
+        print("")
         encrypt = self.__input_output_handler.get_encrypt()
         message = self.__input_output_handler.get_message(
             "Please type text you want to encrypt: \n"
         )
 
-        print("")
         key = self.__input_output_handler.get_key()
         encrypted = self.__analyzer.encrypt(message, key if encrypt == "E" else -key)
         self.__view.display_encryption(message, encrypted)
+        self.__input_output_handler.enter_message()
 
     def selection2(self):
-        print("Option 2 is selected\n")
-        user_option = self.__input_output_handler.get_encrypt()
         print("")
-
+        user_option = self.__input_output_handler.get_encrypt()
         while True:
             optionchosen = "encrypt: " if user_option == "E" else "decrypt: "
-            file_path = self.__input_output_handler.get_file_path(
-                f"Enter the file you want to {optionchosen}"
-            )
-            file_contents = self.__input_output_handler.open_non_empty_file(
-                file_path, f"Enter the file you want to {optionchosen}"
-            )
+            file_path = self.__input_output_handler.get_file_path(f"Enter the file you want to {optionchosen}")
+            file_contents = self.__input_output_handler.open_non_empty_file(file_path, f"Enter the file you want to {optionchosen}")
 
             key = self.__input_output_handler.get_key()
-            new_file_path = self.__input_output_handler.get_file_path("Enter the output file: ")
+            new_file_path = self.__input_output_handler.get_file_path(
+                "Enter the output file: "
+            )
 
-            file_encrypted = self.__analyzer.encrypt(file_contents, key if user_option == "E" else -key)
+            file_encrypted = self.__analyzer.encrypt(
+                file_contents, key if user_option == "E" else -key
+            )
 
             self.__input_output_handler.writefile(new_file_path, file_encrypted)
             break
-        continuemsg = input("Press any key to continue...")
+        self.__input_output_handler.enter_message()
 
     def selection3(self):
+        print()
         text_filepath = self.__input_output_handler.get_file_path(
             "Please enter the file you want to analyze: "
         )
@@ -75,20 +75,16 @@ class Controller:
         )
         letter_frequency = self.__analyzer.get_frequency(text)
         self.__view.display_analyze_frequency(letter_frequency)
-        print("Option 3 Selected")
 
     def selection4(self):
+        print()
         # Get file path & content
         file_path = self.__input_output_handler.get_file_path("Please enter the file you want to analyze: ")
-        file_content = self.__input_output_handler.open_non_empty_file(
-            file_path, f"Please enter the file you want to analyze: "
-        )
+        file_content = self.__input_output_handler.open_non_empty_file(file_path, f"Please enter the file you want to analyze: ")
 
         # Get Reference File & content
-        reference_file_path = self.__input_output_handler.get_file_path("Please enter the reference file: ")
-        reference_file_content = self.__input_output_handler.open_non_empty_file(
-            reference_file_path, f"Please enter the reference file: "
-        )
+        reference_file_path = self.__input_output_handler.get_file_path("Please enter the reference file: ", nospacing=True)
+        reference_file_content = self.__input_output_handler.open_non_empty_file(reference_file_path, f"Please enter the reference file: ")
 
         # Can't put this inside infer_caesar_cipher_key() because of Option 5
         reference_file = reference_file_content.replace("\n", ",").split(",")
@@ -101,28 +97,37 @@ class Controller:
             "^[yn]$",
             "Would you want to decrypt this file using this key? y/n: ",
             "Invalid input, please enter y or n",
-        ) 
+        )
+        print()
 
         if user_option == "y":
-            new_file_path = self.__input_output_handler.get_file_path("Enter the output file: ")
+            new_file_path = self.__input_output_handler.get_file_path(
+                "Enter the output file: "
+            )
             decrypted_contents = self.__analyzer.encrypt(file_content, -key)
             self.__input_output_handler.writefile(new_file_path, decrypted_contents)
+        self.__input_output_handler.enter_message()
 
     def selection5(self):
-        letterfrequency = [8.2, 1.5, 2.8, 4.3, 12.7, 2.2, 2.0, 6.1, 7.0, 0.15, 0.77, 4.0, 2.4, 6.7, 7.5, 1.9, 
-                           0.095, 6.0, 6.3, 9.1, 2.8, 0.98, 2.4, 0.15, 2.0, 0.074]
+        print()
+        letterfrequency = [8.2,1.5,2.8,4.3,12.7,2.2,2.0,6.1,7.0,0.15,0.77,4.0,2.4,
+                           6.7,7.5,1.9,0.095,6.0,6.3,9.1,2.8,0.98,2.4,0.15,2.0,0.074,]
+        
         folder_path = self.__input_output_handler.check_folder()
         # retrieve all file paths inside that folder_path
         files_folder = self.__input_output_handler.get_files_folder(folder_path)
         file_keys = []
 
         for files in files_folder:
-            content = self.__input_output_handler.openfile(os.path.join(folder_path, files), input_message="none")
+            content = self.__input_output_handler.openfile(
+                os.path.join(folder_path, files), input_message="none"
+            )
             if content == "":
                 print(f"The file '{files}' is empty, and won't be processed.")
                 continue
-            inferred_key = self.__analyzer.infer_caesar_cipher_key(content, letterfrequency)
-            print(f"Inferred key for {files} is {inferred_key}")
+            inferred_key = self.__analyzer.infer_caesar_cipher_key(
+                content, letterfrequency
+            )
             file_keys.append((files, inferred_key))
 
         file_keys.sort(key=lambda x: x[1])
@@ -136,18 +141,21 @@ class Controller:
             # Write the decrypted contents to a new file
             file_no = f"file{file_number}.txt"
             self.__input_output_handler.writefile(os.path.join(folder_path, file_no), file_contents)
+            print(f"Decrypting: {file_name} with key: {key} as: {file_no}\n")
 
             # Add the file name and key to a log string
-            file_keys_log += f"Decrypted : {file_name} with key {key} as :{file_no}\n"
+            file_keys_log += f"Decrypted : {file_name} with key {key} as: {file_no}\n"
             file_number += 1
-        self.__input_output_handler.writefile(os.path.join(folder_path, "log.txt" ), file_keys_log)
+        self.__input_output_handler.writefile(os.path.join(folder_path, "log.txt"), file_keys_log)
+        print("\n")
+        self.__input_output_handler.enter_message()
 
     def selection6(self):
         folder_name = self.__input_output_handler.check_folder()
         enc = self.__input_output_handler.get_encrypt()
         key = self.__input_output_handler.get_key()
-        self.__analyzer.process_folder(folder_name, key, encrypt=enc, infer=None)
 
+        self.__analyzer.process_folder(folder_name, key, encrypt=enc, infer=None)
 
     def selection7(self):
         print("Option 7 Selected")
@@ -170,13 +178,17 @@ class Controller:
             print("Please type text you want to encrypt: ")
             message = input()
 
-        percentage_similarity, frequency_diff = self.analyzer.compare_frequency_distribution(message)
+        (
+            percentage_similarity,
+            frequency_diff,
+        ) = self.analyzer.compare_frequency_distribution(message)
         self.view.display_frequency(frequency_diff, percentage_similarity)
 
     def goodbye(self):
         print(
             "\nBye, thanks for using ST1507 DSAA: Caesar Cipher Encrypted Message Analyzer"
         )
+
 
 if __name__ == "__main__":
     print(
@@ -189,10 +201,9 @@ if __name__ == "__main__":
 *                                                       *
 *  - Done by: Hazem Bin Ryaz Patel(2200550)             *
 *  - Class DAAA/2B/07                                   *
-*********************************************************
-Press enter key to continue..."""
+*********************************************************"""
     )
-    input()
+    input("Press enter key, to continue...")
     view = View()
     analyzer = CaesarCipherAnalyzer()
     io = InputOutputHandler()

@@ -63,6 +63,7 @@ class View:
         print("  ".join(chr(65 + i) for i in range(26)))
     
     def display_frequency(self, frequency_diff, percentage_similarity):
-
-        print("The difference between the text's frequency distribution and the English language frequency distribution is:", frequency_diff)
-        print("The text's frequency distribution is", percentage_similarity, "% similar to the English language frequency distribution.")
+        print(f"The difference between the text's frequency distribution and the English language frequency distribution is: {frequency_diff:.2f}")
+        print()
+        print(f"The text's frequency distribution is {percentage_similarity:.2f}% similar to the English language frequency distribution.")
+        print()

@@ -150,43 +150,44 @@ class Controller:
         print("\n")
         self.__input_output_handler.enter_message()
 
-    def selection6(self):
-
-        
+    def selection6(self): # Batch Encrypt Files
+        print()
         folder_name = self.__input_output_handler.check_folder()
-        
-
-        enc = self.__input_output_handler.get_encrypt()
+        files_folder = self.__input_output_handler.get_files_folder(folder_name)
         key = self.__input_output_handler.get_key()
 
-        self.__analyzer.process_folder(folder_name, key, encrypt=enc, infer=None)
+        for file_name in files_folder:
+            filepath = os.path.join(folder_name, file_name)
+            file_contents = self.__input_output_handler.openfile(filepath, input_message="none")
+            if file_contents == "":
+                print(f"The file '{file_name}' is empty, and won't be encrypted.")
+                continue
+            file_contents = self.__analyzer.encrypt(file_contents, key)
+            file_encrypted = f"{file_name}_encrypted.txt"
+            self.__input_output_handler.writefile(os.path.join(folder_name, file_encrypted), file_contents)
 
+        print(f"Encrypted files are saved in {folder_name}")
+        print("\n")
+        self.__input_output_handler.enter_message()
+    
     def selection7(self):
-        print("Option 7 Selected")
-        analyze_message = self.check_input(
+        print()
+        analyze_message = self.__input_output_handler.check_input(
             "^[1-2]$",
             "Would you like to analyze a file(1) or a message(2) ",
             "Invalid input, please enter 1 or 2",
         )
 
         if analyze_message == "1":
-            input_message = "Please enter the file you want to analyze: "
-            file_path = self.check_input(
-                "^.+\.txt$",
-                (input_message),
-                "Invalid input, please enter a valid file path",
-            )
-            message = self.analyzer.openfile(file_path, input_message)
+            file_path = self.__input_output_handler.get_file_path("Please enter the file you want to analyze: ")
+            message = self.__input_output_handler.openfile(file_path, input_message="Please enter the file you want to analyze: ")
 
         if analyze_message == "2":
-            print("Please type text you want to encrypt: ")
-            message = input()
+            message = self.__input_output_handler.get_message("Please enter the message you want to analyze: \n")
 
-        (
-            percentage_similarity,
-            frequency_diff,
-        ) = self.analyzer.compare_frequency_distribution(message)
-        self.view.display_frequency(frequency_diff, percentage_similarity)
+        percentage_similarity, frequency_diff = self.__analyzer.compare_frequency_distribution(message)
+        self.__view.display_frequency(frequency_diff, percentage_similarity)
+        self.__input_output_handler.enter_message()
 
     def goodbye(self):
         print(

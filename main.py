@@ -2,18 +2,20 @@
 # Admission Number: 2200550
 # Class: DAAA/FT/2B/07
 
-from CaesarCipherAnalyzer import CaesarCipherAnalyzer
+from model import CipherAnalyzer
 from View import View
 from InputOutputHandler import InputOutputHandler
+from SortedList import SortedList
 import re
 import os
 
 
 class Controller:
-    def __init__(self, view, analyzer, input_output_handler):
+    def __init__(self, view, analyzer, input_output_handler, SortedList):
         self.__input_output_handler = input_output_handler
         self.__view = view
         self.__analyzer = analyzer
+        self.__sortedList = SortedList
         self.__choices = {
             "1": self.selection1,
             "2": self.selection2,
@@ -67,12 +69,10 @@ class Controller:
 
     def selection3(self):
         print()
-        text_filepath = self.__input_output_handler.get_file_path(
-            "Please enter the file you want to analyze: "
-        )
-        text = self.__input_output_handler.open_non_empty_file(
-            text_filepath, "Please enter the file you want to analyze: "
-        )
+        text_filepath = self.__input_output_handler.get_file_path("Please enter the file you want to analyze: ")
+        text = self.__input_output_handler.open_non_empty_file(text_filepath, "Please enter the file you want to analyze: ")
+
+
         letter_frequency = self.__analyzer.get_frequency(text)
         self.__view.display_analyze_frequency(letter_frequency)
 
@@ -210,6 +210,7 @@ if __name__ == "__main__":
     )
     input("Press enter key, to continue...")
     view = View()
-    analyzer = CaesarCipherAnalyzer()
+    analyzer = CipherAnalyzer()
     io = InputOutputHandler()
-    Controller(view, analyzer, io).run()
+    sortedList = SortedList()
+    Controller(view, analyzer, io, sortedList).run()

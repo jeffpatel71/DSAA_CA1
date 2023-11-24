@@ -11,7 +11,7 @@ from HazemCounter import LetterFrequency
 import os
 
 
-class CaesarCipherAnalyzer:
+class CipherAnalyzer:
     def __init__(self):
         self.selection = None
 

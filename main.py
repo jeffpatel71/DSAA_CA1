@@ -9,7 +9,6 @@ from SortedList import SortedList
 import re
 import os
 
-
 class Controller:
     def __init__(self, view, analyzer, input_output_handler, SortedList):
         self.__input_output_handler = input_output_handler
@@ -41,6 +40,8 @@ class Controller:
             "Please type text you want to encrypt: \n"
         )
 
+
+
         key = self.__input_output_handler.get_key()
         encrypted = self.__analyzer.encrypt(message, key if encrypt == "E" else -key)
         self.__view.display_encryption(message, encrypted)
@@ -69,12 +70,17 @@ class Controller:
 
     def selection3(self):
         print()
+        
         text_filepath = self.__input_output_handler.get_file_path("Please enter the file you want to analyze: ")
         text = self.__input_output_handler.open_non_empty_file(text_filepath, "Please enter the file you want to analyze: ")
-
-
+        
         letter_frequency = self.__analyzer.get_frequency(text)
-        self.__view.display_analyze_frequency(letter_frequency)
+        top5 = self.__sortedList    
+        for i, freq in enumerate(letter_frequency):
+            top5.insert((i, freq)) 
+        top5 = top5.to_list()[:5]
+        # top5 = sorted(index_frequency_pairs, key=lambda x:x[1], reverse=True)[:5]
+        self.__view.display_analyze_frequency(letter_frequency, top5)
 
     def selection4(self):
         print()

@@ -32,10 +32,9 @@ class View:
     def display_key(self, key):
         print("The Inferred key is: ", key)
     
-    def display_analyze_frequency(self, frequency):
-        index_frequency_pairs = [(i, freq) for i, freq in enumerate(frequency)]
-        top5 = sorted(index_frequency_pairs, key=lambda x:x[1], reverse=True)[:5]
-        
+    def display_analyze_frequency(self, frequency, top5):
+
+        print(top5)
         for i in range(26, 0, -1):
             line = ''.join('*  ' if freq > (100 * i / 26) else '   ' for freq in frequency)
             # Add the frequency percentage for the current character
